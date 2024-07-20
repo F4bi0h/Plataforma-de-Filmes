@@ -38,6 +38,7 @@ main {
     justify-content: flex-start;
     flex-direction: column;
     padding-top: 10px;
+    padding-top: 70px;
 }
 .lista {
     margin-top: 30px;

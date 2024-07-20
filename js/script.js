@@ -16,8 +16,8 @@ fetch('https://api.themoviedb.org/3/configuration', options)
 
 window.addEventListener('load', () => {
   Promise.all([
-    fetch('https://api.themoviedb.org/3/movie/popular?language=en-USS&page=1', options),
-    fetch('https://api.themoviedb.org/3/tv/popular?language=pt-BRS&page=1', options)
+    fetch('https://api.themoviedb.org/3/movie/popular?language=pt-BR&page=1', options),
+    fetch('https://api.themoviedb.org/3/tv/popular?language=pt-BR&page=1', options)
   ])
   .then(async ([moviesResponse, seriesResponse]) => {
 
@@ -29,7 +29,6 @@ window.addEventListener('load', () => {
     combinedResults.sort(() => Math.random() - 0.5);
 
     listarFilmesSeries(combinedResults);
-    console.log(combinedResults)
   })
   .catch(err => console.error(err));
 });
@@ -61,7 +60,7 @@ btnPesquisa.addEventListener('click', event => {
     valorInput.value = '';
   } else {
     Swal.fire({
-      title: 'Error!',
+      title: 'Ops!',
       text: 'Insira um titulo de pesquisa!',
       icon: 'error',
       confirmButtonText: 'Fechar'
