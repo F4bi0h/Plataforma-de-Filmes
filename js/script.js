@@ -14,24 +14,33 @@ fetch('https://api.themoviedb.org/3/configuration', options)
   .catch(err => console.error(err));
 
 
+
+
+let paginaAtual = 1;
+
 window.addEventListener('load', () => {
-  Promise.all([
-    fetch('https://api.themoviedb.org/3/movie/popular?language=pt-BR&page=1', options),
-    fetch('https://api.themoviedb.org/3/tv/popular?language=pt-BR&page=1', options)
-  ])
-  .then(async ([moviesResponse, seriesResponse]) => {
-
-    const moviesData = await moviesResponse.json();
-    const seriesData = await seriesResponse.json();
-
-    const combinedResults = [...moviesData.results, ...seriesData.results];
-
-    combinedResults.sort(() => Math.random() - 0.5);
-
-    listarFilmesSeries(combinedResults);
-  })
-  .catch(err => console.error(err));
+  carregarDados(paginaAtual);
+  configurarBotoesPaginacao();
 });
+
+function carregarDados(pagina) {
+  Promise.all([
+    fetch(`https://api.themoviedb.org/3/movie/popular?language=pt-BR&page=${pagina}`, options),
+    fetch(`https://api.themoviedb.org/3/tv/popular?language=pt-BR&page=${pagina}`, options)
+  ])
+    .then(async ([moviesResponse, seriesResponse]) => {
+
+      const moviesData = await moviesResponse.json();
+      const seriesData = await seriesResponse.json();
+
+      const combinedResults = [...moviesData.results, ...seriesData.results];
+
+      combinedResults.sort(() => Math.random() - 0.5);
+
+      listarFilmesSeries(combinedResults);
+    })
+    .catch(err => console.error(err));
+}
 
 
 let btnPesquisa = document.querySelector('#btnPesquisar');
@@ -49,7 +58,7 @@ btnPesquisa.addEventListener('click', event => {
         } else {
           Swal.fire({
             title: 'Error!',
-            text: 'Esse filme não consta no banco de dados!',
+            text: 'Ops, não conseguimos encontrar esse título!',
             icon: 'error',
             confirmButtonText: 'Fechar'
           });
@@ -92,3 +101,52 @@ function criarListaDeFilmesSeries(title, poster, idMovie) {
 
   lista.append(card);
 }
+
+
+//funcção para mudar de página
+function mudarPagina(action) {
+  if (action === 'Anterior') {
+    if (paginaAtual > 1) paginaAtual--;
+  } else if (action === 'Seguinte') {
+    if (paginaAtual < 300) paginaAtual++;
+  } else {
+    paginaAtual = action;
+  }
+
+  carregarDados(paginaAtual);
+  atualizarPagina();
+}
+
+
+function atualizarPagina() {
+  let buttons = document.querySelectorAll('.page-btn');
+
+  buttons.forEach(btn => {
+    btn.classList.remove('active-page');
+
+    let numeroPagina = parseInt(btn.textContent);
+    if (numeroPagina === paginaAtual) {
+      btn.classList.add('active-page');
+    }
+
+  });
+}
+
+// Configura os eventos de clique nos botões de paginação
+function configurarBotoesPaginacao() {
+  document.querySelectorAll('.page-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const action = button.textContent.trim(); // Obtém o texto do botão
+      mudarPagina(action);
+      button.classList.add('active-page');
+    });
+  });
+
+  // Configura os botões "Anterior" e "Seguinte"
+  document.getElementById('btnAnterior').addEventListener('click', () => mudarPagina('Anterior'));
+  document.getElementById('btnSeguinte').addEventListener('click', () => mudarPagina('Seguinte'));
+}
+
+
+
+atualizarPagina();

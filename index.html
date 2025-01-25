@@ -21,13 +21,13 @@
     <header>
         <nav class="navbar navbar-dark bg-primary fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Dev Movies</a>
+                <a class="navbar-brand" href="index.html">Dev Movies</a>
 
                 <div style="display: flex;">
                     <form class="d-flex" role="search" style="margin-right: 25px;">
                         <input id="valorPesquisa" class="form-control" type="search" placeholder="Search"
                             aria-label="Search">
-                        <button id="btnPesquisar" class="btn btn-outline-dark" type="submit">
+                        <button id="btnPesquisar" class="btn btn-primary" type="submit">
                             <span class="material-symbols-outlined">search</span>
                         </button>
                     </form>
@@ -69,6 +69,16 @@
         <section class="area">
             <h1>Pesquisar filmes</h1>
             <div class="lista"></div>
+
+            <div class="pags">
+                <button id="btnAnterior" class="active-page page-btn btn">Anterior</button>
+                <button class="page-btn btn">1</button>
+                <button class="page-btn btn">2</button>
+                <button class="page-btn btn">3</button>
+                <button class="page-btn btn">...</button>
+                <button class="page-btn btn">300</button>
+                <button id="btnSeguinte" class="page-btn btn">Seguinte</button>
+            </div>
         </section>
     </main>
 

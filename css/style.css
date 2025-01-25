@@ -81,3 +81,21 @@ main {
     text-align: center;
     max-width: 100%;
 }
+
+.pags {
+    margin: 25px;
+}
+
+.pags .page-btn {
+    border: 1px solid #f0fffc;
+    color: #f0fffc;
+}
+
+.pags .active-page {
+    background: #0b5ed7;
+    border: none;
+}
+
+.pags .active-page:hover {
+    background: #0b5ed7;
+}
