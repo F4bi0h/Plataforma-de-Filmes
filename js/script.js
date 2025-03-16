@@ -21,6 +21,7 @@ let paginaAtual = 1;
 window.addEventListener('load', () => {
   carregarDados(paginaAtual);
   configurarBotoesPaginacao();
+  atualizarBotoesPaginacao();
 });
 
 function carregarDados(pagina) {
@@ -103,32 +104,55 @@ function criarListaDeFilmesSeries(title, poster, idMovie) {
 }
 
 
-//funcção para mudar de página
+// Função para mudar de página
 function mudarPagina(action) {
-  if (action === 'Anterior') {
-    if (paginaAtual > 1) paginaAtual--;
-  } else if (action === 'Seguinte') {
-    if (paginaAtual < 300) paginaAtual++;
-  } else {
-    paginaAtual = action;
+  let novaPagina = paginaAtual;
+
+  if (action === 'Anterior' && paginaAtual > 1) {
+    novaPagina--;
+  } else if (action === 'Seguinte' && paginaAtual < 300) {
+    novaPagina++;
+  } else if (!isNaN(parseInt(action))) {
+    novaPagina = parseInt(action);
   }
 
+  // Se a página não mudou, não faz nada
+  if (novaPagina === paginaAtual) return;
+
+  paginaAtual = novaPagina;
+
+  atualizarBotoesPaginacao(); // Atualiza os botões da interface
   carregarDados(paginaAtual);
+}
+
+// Função para atualizar os botões de paginação corretamente
+function atualizarBotoesPaginacao() {
+  let firstButton = document.querySelector("#first-button");
+  let secondButton = document.querySelector("#second-button");
+  let thirdButton = document.querySelector("#third-button");
+
+  if (paginaAtual > 3) {
+    thirdButton.innerHTML = paginaAtual;
+    secondButton.innerHTML = paginaAtual - 1;
+    firstButton.innerHTML = paginaAtual - 2;
+  } else {
+    firstButton.innerHTML = 1;
+    secondButton.innerHTML = 2;
+    thirdButton.innerHTML = 3;
+  }
+
   atualizarPagina();
 }
 
-
+// Atualiza a aparência dos botões
 function atualizarPagina() {
   let buttons = document.querySelectorAll('.page-btn');
 
   buttons.forEach(btn => {
     btn.classList.remove('active-page');
-
-    let numeroPagina = parseInt(btn.textContent);
-    if (numeroPagina === paginaAtual) {
+    if (parseInt(btn.textContent) === paginaAtual) {
       btn.classList.add('active-page');
     }
-
   });
 }
 
@@ -136,17 +160,13 @@ function atualizarPagina() {
 function configurarBotoesPaginacao() {
   document.querySelectorAll('.page-btn').forEach(button => {
     button.addEventListener('click', () => {
-      const action = button.textContent.trim(); // Obtém o texto do botão
+      const action = button.textContent.trim();
       mudarPagina(action);
-      button.classList.add('active-page');
     });
   });
 
-  // Configura os botões "Anterior" e "Seguinte"
   document.getElementById('btnAnterior').addEventListener('click', () => mudarPagina('Anterior'));
   document.getElementById('btnSeguinte').addEventListener('click', () => mudarPagina('Seguinte'));
 }
-
-
 
 atualizarPagina();
