@@ -4,7 +4,7 @@ const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer '
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYjg0MWYwMzczMTQ0NThjNWQzMDhhZmZlYTQyZDg5NiIsInN1YiI6IjY2NmQyMWM4YzkyNjg4ZDhmYmNlNTBlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QAbY3Gl_FQrX6X26zjrmlXhf1w0FBQ3YiJBh5FSrr10'
   }
 };
 
@@ -109,9 +109,9 @@ function mudarPagina(action) {
   let novaPagina = paginaAtual;
 
   if (action === 'Anterior' && paginaAtual > 1) {
-    novaPagina--;
+    novaPagina = novaPagina -1;
   } else if (action === 'Seguinte' && paginaAtual < 300) {
-    novaPagina++;
+    novaPagina = novaPagina +1;
   } else if (!isNaN(parseInt(action))) {
     novaPagina = parseInt(action);
   }
@@ -123,6 +123,7 @@ function mudarPagina(action) {
 
   atualizarBotoesPaginacao(); // Atualiza os botões da interface
   carregarDados(paginaAtual);
+
 }
 
 // Função para atualizar os botões de paginação corretamente
@@ -135,6 +136,13 @@ function atualizarBotoesPaginacao() {
     thirdButton.innerHTML = paginaAtual;
     secondButton.innerHTML = paginaAtual - 1;
     firstButton.innerHTML = paginaAtual - 2;
+
+    if (paginaAtual == 300) {
+      thirdButton.innerHTML = paginaAtual - 1;
+      secondButton.innerHTML = paginaAtual - 2;
+      firstButton.innerHTML = paginaAtual - 3;
+    }
+
   } else {
     firstButton.innerHTML = 1;
     secondButton.innerHTML = 2;
@@ -165,8 +173,6 @@ function configurarBotoesPaginacao() {
     });
   });
 
-  document.getElementById('btnAnterior').addEventListener('click', () => mudarPagina('Anterior'));
-  document.getElementById('btnSeguinte').addEventListener('click', () => mudarPagina('Seguinte'));
 }
 
 atualizarPagina();
